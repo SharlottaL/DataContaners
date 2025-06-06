@@ -17,11 +17,11 @@ namespace BinaryTree
             this.Data = Data;
             this.pLeft = pLeft;
             this.pRith = pRigth;
-            Console.WriteLine("EC");
+            //Console.WriteLine("EC");
         }
         ~Element()
         {
-            Console.WriteLine("ED");
+            //Console.WriteLine("ED");
         }
     }
 }
