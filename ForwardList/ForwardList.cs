@@ -18,11 +18,11 @@ namespace ForwardList
             Head = null;
             Console.WriteLine($"LConstr:\t{GetHashCode()}");
         }
-        ~ForwardList()
+        public int GetHead()
         {
-            Head = null;
-            Length = 0;
-            Console.WriteLine($"LDestr:\t{GetHashCode()}");
+            if (Head == null)
+                throw new IndexOutOfRangeException("Error!!!Head Pysto!");
+            return Head.Data;
         }
         public void Clear()
         {
@@ -107,6 +107,9 @@ namespace ForwardList
         }
         public void PopFront()
         {
+            if (Head == null)
+                throw new IndexOutOfRangeException("Error!!!PYSTO");
+            
             if (Head != null)
                 Head = Head.pNext;
             Length--;
@@ -132,8 +135,6 @@ namespace ForwardList
             for (Element Temp = Head; Temp != null; Temp = Temp.pNext)
             {
                 Console.WriteLine($"{Temp.Data}\t");
-                Console.WriteLine();
-                Console.WriteLine($"Col{Length}");
             }
         }
     }

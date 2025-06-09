@@ -10,20 +10,21 @@ namespace List
     internal class List
     {
         Element Head { get; set; }
-        Element Tail { get; set; }
+        public Element Tail { get; private set; }
         public int Length { get; private set; }
         public List()
         {
             Head = null;
             Tail = null;
+            Length = 0;
             Console.WriteLine($"LConstr:\t{GetHashCode()}");
         }
-        ~List()
+        public int GetHead()
         {
-            Head = null;
-            Tail = null;
-            Length = 0;
-            Console.WriteLine($"LDestr:\t{GetHashCode()}");
+            if(Head == null)
+                throw new IndexOutOfRangeException("Error!!!Head Pysto!");
+
+            return Head.Data;
         }
         public void Clear()
         {
@@ -34,60 +35,36 @@ namespace List
        
         public void PushFront(int Data)
         {
-            Head = new Element(Data, Head);
-            //Tail = new Element(Data, Head);
+            Element newElement = new Element(Data);
+           if(Head == null)
+            {
+                Head = newElement;
+                Tail = newElement;
+            }
+            else
+            {
+                newElement.pNext = Head;
+                Head.pPrev = newElement;
+                Head = newElement;
+            }
             Length++;
-
         }
-        //public void PushBack(int Data)
-        //{
-        //    Element New = new Element(Data);
-        //    if (Head == null)
-        //    {
-        //        PushFront(Data);
-        //        return;
-        //    }
-        //    ////Element Temp = Tail;
-        //    ////while (Temp.pPrew != null) Temp = Temp.pPrew;
-
-        //    ////Temp.pPrew = new Element(Data);
-        //    ////Tail.pNext = New;
-        //    ////New.pPrew = Tail;
-        //    ////////2)
-        //    //////New.pNext = Head;
-        //    ////Tail = New;
-        //    ////Element Temp = Head;
-        //    ////while (Temp.pNext != null) Temp = Temp.pNext;
-
-        //    ////Temp.pNext = new Element(Data);
-
-
-        //    ////Length++;
-        //    ////}
-        //    ////Element Temp = Head;
-        //    ////while (Tail.pNext != null) Tail = Tail.pPrew;
-
-        //    ////Tail.pNext = new Element(Data);
-
-        //    ////Tail = new Element(Data, Head);
-        //    ////Head = new Element(Data, Head);
-        //    //else
-        //    //{
-        //    //    // 3.1. Привязываем новый элемент после текущего хвоста
-        //    //    Tail.pNext = New;
-
-        //    //    // 3.2. Устанавливаем обратную ссылку нового элемента
-        //    //    New.pPrew = Tail;
-
-        //    //    // 3.3. Обновляем хвост списка
-        //    //    Tail = New;
-        //    //}
-
-        //    //// 4. Увеличиваем счетчик элементов
-        //    //Length++;
-        //    Tail = new Element(Data, Head);
-        //    Length++;
-        //}
+        public void PushBack(int Data)
+        {
+            Element newElement = new Element(Data);
+            if (Head == null)
+            {
+                Head = newElement;
+                Tail = newElement;
+            }
+            else
+            {
+                newElement.pPrev = Tail;
+                Tail.pNext = newElement;
+                Tail = newElement;
+            }
+            Length++;
+        }
         //public void Insert(int Data, int Index)
         //{
         //    Element newElement = new Element(Data, Head);
@@ -115,32 +92,49 @@ namespace List
         //}
         public void PopFront()
         {
-            if (Head != null)
+            if (Head == null) return;
+
+            if (Head==Tail)
+            {
+                Head = null;
+                Tail = null;
+            }
+            else
             {
                 Head = Head.pNext;
                 Head.pPrev = null;
             }
+
             Length--;
         }
 
         public void PopBack()
         {
-            if (Tail != null)
+            if (Tail == null) return;
+
+            if (Head == Tail)
             {
-                Tail = Head.pPrev; // Перемещаем хвост назад
-               Tail.pNext = null;
+                Head = null;
+                Tail = null;
             }
+            else
+            {
+                Tail = Tail.pPrev;
+                Tail.pNext = null;
+            }
+
             Length--;
         }
 
         public void Print()
         {
-            for (Element Temp = Head; Temp != null; Temp = Temp.pNext)
+            Element current = Head;
+            while(current != null)
             {
-                Console.WriteLine($"{Temp.Data}\t");
-                Console.WriteLine();
-                Console.WriteLine($"Col{Length}");
+                Console.Write(current.Data + " ");
+                current = current.pNext;
             }
+            Console.WriteLine();
         }
     }
 }

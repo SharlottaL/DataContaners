@@ -8,10 +8,10 @@ using System.Xml.Linq;
 
 namespace BinaryTree
 {
-    internal class Tree/*:IEnumerable*/
+    internal class Tree
     {
         static readonly int BASE_INTERVAL = 3;
-        private Element Root { get; set; }
+        public Element Root { get; protected set; }
         public Tree()
         {
             Root = null;
@@ -104,39 +104,39 @@ namespace BinaryTree
         }
 
         public void Clear() => Root = null;
-        void Erase(int Data, Element Root, Element Parant)
+        public void Erase(int Data)
+        {
+            Element Root = this.Root;
+            Erase(Data, Root, null);
+        }
+        void Erase(int Data, Element Root, Element Parent)
         {
             if (Root == null) return;
-            
+            Erase(Data, Root.pLeft, Root);
+            Erase(Data, Root.pRith, Root);
             if (Data == Root.Data)
             {
                 if (Root.pLeft == Root.pRith)
                 {
-                    if (Root.Equals(Parant.pLeft)) Parant.pLeft = null;
-                    if (Root.Equals(Parant.pRith)) Parant.pRith = null;
+                    if (Root.Equals(Parent.pLeft)) Parent.pLeft = null;
+                    if (Root.Equals(Parent.pRith)) Parent.pRith = null;
                 }
                 else
                 {
                     if (Count(Root.pLeft) > Count(Root.pRith))
                     {
                         Root.Data = MaxValue(Root.pLeft);
-                        Erase(MaxValue(Root.pLeft), Root.pLeft, null);
+                        Erase(MaxValue(Root.pLeft), Root.pLeft, Root);
                     }
                     else
                     {
                         Root.Data = MinValue(Root.pRith);
-                        Erase(MinValue(Root.pRith), Root.pRith, null);
+                        Erase(MinValue(Root.pRith), Root.pRith, Root);
                     }
                 }
-               
             }
-             Erase(Data, Root.pRith, Root);
-                Erase(Data, Root.pLeft, Root);
-        }
-        public void Erase(int Data)
-        {
-            Element Root = this.Root;
-            Erase(Data, Root, null);
+            //if(Root != null)Erase(Data, Root.pLeft);
+            //if(Root != null)Erase(Data, Root.pRight);
         }
         public void Balance()
         {
@@ -146,29 +146,25 @@ namespace BinaryTree
         {
             if (Root == null) return;
             //Balance(Root.pLeft);
-            // Balance(Root.pRith);
+            //Balance(Root.pRight);
             if (Math.Abs(Count(Root.pLeft) - Count(Root.pRith)) < 2) return;
-            
-                if (Count(Root.pLeft) > Count(Root.pRith))
-                {
-                    if (Root.pRith == null) Root.pRith = new Element(Root.Data);
-                    else Insert(Root.Data, Root.pRith);
-                    Root.Data = MaxValue(Root.pLeft);
-                    Erase(MaxValue(Root.pLeft), Root, null);
-                }
-                else
-                {
-                    if (Root.pLeft == null) Root.pLeft = new Element(Root.Data);
-                    else Insert(Root.Data, Root.pLeft);
-                    Root.Data = MinValue(Root.pRith);
-                    Erase(MinValue(Root.pRith), Root.pRith, Root);
-                }
-
-            
+            if (Count(Root.pLeft) > Count(Root.pRith))
+            {
+                if (Root.pRith == null) Root.pRith = new Element(Root.Data);
+                else Insert(Root.Data, Root.pRith);
+                Root.Data = MaxValue(Root.pLeft);
+                Erase(MaxValue(Root.pLeft), Root.pLeft, Root);
+            }
+            else
+            {
+                if (Root.pLeft == null) Root.pLeft = new Element(Root.Data);
+                else Insert(Root.Data, Root.pLeft);
+                Root.Data = MinValue(Root.pRith);
+                Erase(MinValue(Root.pRith), Root.pRith, Root);
+            }
             Balance(Root.pLeft);
-           Balance(Root.pRith);
+            Balance(Root.pRith);
             Balance(Root);
-
         }
         public int MinValue()
         {

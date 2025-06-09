@@ -95,14 +95,18 @@ namespace BinaryTree
             tree.Insert(3);
             tree.Insert(2);
             tree.Insert(1);
+
+
+
             tree.Print();
-            //tree.DepthPrint(1);
+            Console.WriteLine("\n----------------------------------\n");
+
+            //tree.DepthPrint(2);
+
             tree.TreePrint();
             //tree.Erase(50);
             tree.Balance();
             tree.TreePrint();
-            // ваше несбалансированное дерево
-            //tree.Balance();
             Console.ReadLine();
         }
        
